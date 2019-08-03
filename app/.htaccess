@@ -5,19 +5,8 @@
 # code is distributed under the terms of the BSD 3-Clause License.
 # The full license text can be found in the LICENSE.txt file.
 #
-
-# OS X
-.DS_Store
-
-# Vim
-.*.sw[a-z]
-
-# PHPStorm
-.idea
-
-# Libraries 
-#libraries/*
-#app/libraries/*
-
-# Temporary files, i.e. compiled templates.
-app/resources/tmp/*
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^$   webroot/   [L]
+    RewriteRule (.*) webroot/$1 [L]
+</IfModule>
