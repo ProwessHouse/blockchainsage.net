@@ -1,4 +1,9 @@
 <?php
+if (!isset($_SERVER['HTTPS'])) {
+
+	header('Location: https://' . $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+	exit;
+}
 /**
  * li₃: the most RAD framework for PHP (http://li3.me)
  *
