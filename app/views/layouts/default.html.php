@@ -22,6 +22,13 @@
 		<div class="content">
 			<?php echo $this->content(); ?>
 		</div>
+<?php 
+	$mtime = microtime();
+	$mtime = explode(" ",$mtime);
+	$mtime = $mtime[1] + $mtime[0];
+	$pageendtime = $mtime;
+	$pagetotaltime = ($pageendtime - $pagestarttime);
+?>
 
 		<?php echo $this->_render('element', 'footer', compact('pagetotaltime'));?>	
 
