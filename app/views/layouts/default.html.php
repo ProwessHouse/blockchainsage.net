@@ -1,55 +1,30 @@
-<?php
-/**
- * li₃: the most RAD framework for PHP (http://li3.me)
- *
- * Copyright 2016, Union of RAD. All rights reserved. This source
- * code is distributed under the terms of the BSD 3-Clause License.
- * The full license text can be found in the LICENSE.txt file.
- */
-?>
 <!doctype html>
+<?php 
+	$mtime = microtime();
+	$mtime = explode(" ",$mtime);
+	$mtime = $mtime[1] + $mtime[0];
+	$pagestarttime = $mtime; 
+
+?>
 <html>
 <head>
 	<?php echo $this->html->charset();?>
 	<title>Application &gt; <?php echo $this->title(); ?></title>
-	<?php echo $this->html->style(['bootstrap.min', 'lithified']); ?>
-	<?php echo $this->scripts(); ?>
-	<?php echo $this->styles(); ?>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<?php echo $this->html->link('Icon', null, ['type' => 'icon']); ?>
 </head>
-<body class="lithified">
-	<div class="container-narrow">
-
-		<div class="masthead">
-			<ul class="nav nav-pills pull-right">
-				<li>
-					<a href="http://li3.me/docs/book/manual/1.x/quickstart">Quickstart</a>
-				</li>
-				<li>
-					<a href="http://li3.me/docs/book/manual/1.x/">Manual</a>
-				</li>
-				<li>
-					<a href="http://li3.me/docs/api/lithium/1.1.x/lithium">API</a>
-				</li>
-				<li>
-					<a href="http://li3.me/">More</a>
-				</li>
-			</ul>
-			<a href="http://li3.me/"><h3>&#10177;</h3></a>
-		</div>
-
-		<hr>
+<body class="container">
+   		<?php echo $this->_render('element', 'header', compact('pagetotaltime'));?>	
 
 		<div class="content">
 			<?php echo $this->content(); ?>
 		</div>
 
-		<hr>
+		<?php echo $this->_render('element', 'footer', compact('pagetotaltime'));?>	
 
-		<div class="footer">
-			<p>&copy; Union Of RAD <?php echo date('Y') ?></p>
-		</div>
 
-	</div>
 </body>
 </html>
