@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<?php 
+	if (!isset($_SERVER['HTTPS'])) {
+	header('Location: https://' . $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+	exit;
+}
+?><html lang="en">
   <head>
     <title>MeetUp - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
