@@ -134,4 +134,9 @@ if (file_exists($file = LITHIUM_LIBRARY_PATH . '/autoload.php')) {
 	require $file;
 }
 
+Libraries::add('li3_qrcode');
+Libraries::add('li3_pdf');
+Libraries::add('jpgraph', array( 	'bootstrap' => 'jpgraph_required.php' ));
+Libraries::add('swiftmailer', array(	'bootstrap' => 'swift_required.php'));
+
 ?>
