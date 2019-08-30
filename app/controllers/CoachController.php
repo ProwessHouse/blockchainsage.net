@@ -136,23 +136,27 @@ class CoachController extends \lithium\action\Controller {
   $returnvalues = $function->sendSms($mobile,$msg);	 // Testing if it works 
   return $otp;		
  }
-	 private function sendEmailTo($email,$coachid){
+	
+	private function sendEmailTo($email,$coachid){
 			$ga = new GoogleAuthenticator();
 			$otp = $ga->getCode($ga->createSecret(64));	 
 			$data = array(
 			'otp.email' => $otp,
 			);
+			$conditions = array("CoachID"=>(string)$coachid);
+			X_coaches::update($data,$conditions);
 			
 			$coach = X_coaches::find('first',array(
 				'conditions'=>array('Email'=>$email)
 			));
+			
 			$emaildata = array(
 				'coach' => $coach,
 				'email' => $email,
-				'otp.email'=>$otp
+				'otp'=>$otp
 			);
-			$conditions = array("CoachID"=>(string)$coachid);
-			X_coaches::update($data,$conditions);
+			
+			
 			$function = new Functions();
 			$compact = array('data'=>$emaildata);
 			$from = array(NOREPLY => "noreply@sff.team");

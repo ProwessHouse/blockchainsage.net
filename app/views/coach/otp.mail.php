@@ -6,11 +6,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/framework7/4.5.0/css/framework7.bundle.css"></link>
 </head>
 <body>
-
-<h1>Coaching Hub on Blockchain</h1>
-<h2>Hi <?=$compact['data']['coach']['FirstName']?> <?=$compact['data']['coach']['LastName']?>,</h2>
-
-<p>You registered on Coaching Hub on Blockchain App using the details:</p>
+<div class="page-content">
+	<h1>Coaching Hub on Blockchain</h1>
+	<h2>Hi <?=$compact['data']['coach']['FirstName']?> <?=$compact['data']['coach']['LastName']?>,</h2>
+	<p>You registered on Coaching Hub on Blockchain App using the details:</p>
 <div class="list">
 <ul>
 	<li>
@@ -78,9 +77,34 @@
 				</div>
 		</div>
 	</li>
+	<li>
+			<div class="item-inner">
+				<div class="item-title">
+						<div class="item-header">IP</div>
+						| <strong><?=$compact['data']['coach']['geoData']['geobytesipaddress']?></strong>
+				</div>
+		</div>
+	</li>
+	<li>
+			<div class="item-inner">
+				<div class="item-title">
+						<div class="item-header">Location</div>
+						| <strong><?=$compact['data']['coach']['geoData']['geobytesfqcn']?></strong>
+				</div>
+		</div>
+	</li>
+	<li>
+			<div class="item-inner">
+				<div class="item-title">
+						<div class="item-header">Lat / Lon</div>
+						| <strong><?=$compact['data']['coach']['geoData']['geobyteslatitude']?> / <?=$compact['data']['coach']['geoData']['geobyteslongitude']?></strong>
+				</div>
+		</div>
+	</li>	
+	
 	</ul>
 	<p>SignIn on the app Coaching Hub on Blockchain and verify your OTP. Start coaching or learn from excellent coaches.</p>
-	
+</div>	
 </div>
 </body>
 </html>
