@@ -52,6 +52,7 @@ class CoachController extends \lithium\action\Controller {
 				'CountryCode'=>$this->request->data['CountryCode'],
 				'Password'=>password_hash($this->request->data['Password'], PASSWORD_BCRYPT),
 				'CoachID'=> str_replace("}","",str_replace("{","",$uuid->create_guid())),
+				'geoData'=>json_decode($this->request->data['geoData'],true),
 			);
 			$coach = X_coaches::find('first',array(
 				'conditions' => array(
@@ -157,7 +158,7 @@ class CoachController extends \lithium\action\Controller {
 			$from = array(NOREPLY => "noreply@sff.team");
 			$email = $email;
 			
-			$function->sendEmailTo($email,$compact,'coach','otp','Email Verify - OTP',$from,'','','','');
+			$function->sendEmailTo($email,$compact,'coach','otp',$otp.' - OTP Verify Email',$from,'','','','');
 // sendEmailTo($email, $compact ,$controller,$template,$subject,$from,$mail1,$mail2 ,$mail3,$attach )
 	}
 }
