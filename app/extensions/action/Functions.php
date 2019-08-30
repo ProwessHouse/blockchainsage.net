@@ -332,7 +332,7 @@ class Functions extends \lithium\action\Controller {
 			
 // Get cURL resource
 $url = 'https://api.twilio.com/2010-04-01/Accounts/'.TWILIO_ACCOUNT_SID.'/Calls.json';
-$CallURL = 'http://sff.team/code/say/'.$twoCode;
+$CallURL = 'https://blockchainsage.net/code/say/'.$twoCode;
 $auth = TWILIO_ACCOUNT_SID.":".TWILIO_AUTH_TOKEN;
 $fields = array(
 		'To' =>  $mobile  ,
