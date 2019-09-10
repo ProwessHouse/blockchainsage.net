@@ -308,5 +308,128 @@ class CoachController extends \lithium\action\Controller {
 			}
 		return $this->render(array('json' => array("success"=>"Yes",'urls'=>$dataUrl)));
 	}
+	
+	function savecc(){
+ $CoachID = $this->request->data['CoachID'];
+ $conditions = array('CoachID'=>$CoachID);
+ $data = array(
+  'CreditCard'=>$this->request->data
+ );
+ X_coaches::update($data,$conditions);
+ return $this->render(array('json' => array("success"=>"Yes","cc"=>$data)));		
+ 
+}
+
+ public function payment(){
+   $this->_render['layout'] = null;
+			
+   $data = $this->request->data;
+			console.log(data);
+			if($data['CoachID']==null){
+    return $this->render(array('json' => array("success"=>"No")));		
+   }
+   
+  $conditions = array(
+   'CoachID'=>(string)$data['CoachID'],
+  );
+  $user = X_coaches::find('first',array(
+   'conditions'=>array('CoachID'=>(string)$data['CoachID'],)
+  ));
+ $paymentArray = []; 
+ $paymentCount = count($user['payment']);
+ 
+ if($user['payment']){
+   foreach($user['payment'] as $p){
+    $previousPayment = array(
+     'CoachID'=>$p['CoachID'],
+     'email'=>$p['email'],
+     'mobile'=>$p['mobile'],
+     'month'=>$p['month'],
+     'datetime'=>$p['datetime'],
+     'shopping'=>$p['shopping'],
+     'approved'=>$p['approved'],
+    );
+     array_push($paymentArray,$previousPayment);
+    
+   }
+ }
+ 
+ $summaryArray = array();
+ if((integer)substr($data['shopping'],1)>1){
+   for ($i = 0; $i <= 11; $i++) {
+     $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." +$i months"));
+   }
+   foreach($months as $m){
+    $summaryArray["summary.".$m] = array(
+     'CoachID'=>$data['CoachID'],
+     'shopping'=>(integer)substr($data['shopping'],1),
+     'totalValue'=>(integer)0,
+     'dateTime'=>null,
+     'pending'=>(float)substr($data['shopping'],1)/12,
+     'monthly'=>(float)substr($data['shopping'],1)/12,
+     'delivery'=>'',
+     'delStatus'=>(integer)0,
+    ); 
+   }
+  }
+  
+  $paymentA = array(
+   'CoachID'=>$data['CoachID'],
+   'email'=>$data['email'],
+   'mobile'=>$data['mobile'],
+   'month'=>date('Y-m-d',strtotime($data['month'])),
+   'datetime'=>gmdate('Y-m-d',time()),
+   'shopping'=>(integer)substr($data['shopping'],1),
+   'approved'=>'No'
+  );
+   array_push($paymentArray,$paymentA);
+  $pm = array('payment'=>$paymentArray);
+		
+ 
+		$conditions = array(
+   'CoachID'=>$data['CoachID'],
+  );
+  if((integer)substr($data['shopping'],1)>100){
+   X_coaches::update($summaryArray,$conditions);
+  }
+   X_coaches::update($pm,$conditions);
+			
+			
+$key = PAYUMONEY_KEY;
+$txnid = "TXN-" . rand(10000,99999999);
+$amount = substr($data['shopping'],1);
+$productinfo = $data['CoachID'].'-'.$data['shopping'];
+$firstname = urldecode($data['name']);
+$email = $data['email'];
+$mobile = $data['mobile'];
+$udf1 = $paymentCount;
+$udf5 = "BOLT_KIT_PHP7";
+$salt = PAYUMONEY_SALT;
+
+//$PAYU_BASE_URL = "https://sandboxsecure.payu.in";		// For Sandbox Mode
+$PAYU_BASE_URL = "https://secure.payu.in";			// For Production Mode
+$action = $PAYU_BASE_URL . '/_payment';
+
+
+			$hash=strtolower(hash('sha512', $key.'|'.$txnid.'|'.$amount.'|'.$productinfo.'|'.$firstname.'|'.$email.'|'.$udf1.'||||'.$udf5.'||||||'.$salt));
+
+			
+   // return $this->render(array('json' => array(
+				// "success"=>"Yes",
+				// 'data'=>$data,
+				// 'paymentCount'=>$paymentCount,
+				// 'amount'=>$amount,
+				// 'action'=>$action,
+				// 'key'=>$key,
+				// 'hash'=>$hash,
+				// 'txnid'=>$txnid,
+				// 'udf1'=>$udf1,
+				// 'udf5'=>$udf5,
+				
+			// )));		
+  return compact('data','paymentCount','success','amount','action','key','hash','txnid','udf1','udf5','productinfo','firstname','email','mobile');
+ }
+
+	
 }
 ?>
