@@ -3,9 +3,8 @@ namespace app\extensions\action;
 
 use lithium\storage\Session;
 
-use app\models\Users;
-use app\models\Details;
-use app\models\Notifications;
+use app\models\X_coaches;
+use app\models\X_notifications;
 
 use lithium\data\Connections;
 use \lithium\template\View;
@@ -487,19 +486,19 @@ curl_close($curl);
   return $results;
 	} 
 
- public function addnotify($mcaNumber,$subtitle,$title){
+ public function addnotify($CoachID,$subtitle,$title){
    $data = array(
-      'mcaNumber'=>$mcaNumber,
+      'CoachID'=>$CoachID,
       'subtitle'=>$subtitle,
       'title'=>$title,
      );
-   Notifications::create()->save($data);    
+   X_notifications::create()->save($data);    
    $data = array(
-      'mcaNumber'=>"36702790",
-      'subtitle'=>"MCA: ". $mcaNumber ." ". $subtitle,
-      'title'=>"MCA: ". $mcaNumber ." ". $title,
+      'CoachID'=>$CoachID,
+      'subtitle'=>"MCA: ". $CoachID ." ". $subtitle,
+      'title'=>"MCA: ". $CoachID ." ". $title,
      );
-   Notifications::create()->save($data);    
+   X_notifications::create()->save($data);    
  return true;
  }
  

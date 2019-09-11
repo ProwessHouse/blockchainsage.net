@@ -7,6 +7,7 @@ use app\extensions\action\Uuid;
 
 use app\models\X_coaches;
 use app\models\X_courses;
+use app\models\X_topics;
 use app\models\X_categories;
 use app\models\X_urls;
 
@@ -365,8 +366,8 @@ class CoachController extends \lithium\action\Controller {
      'shopping'=>(integer)substr($data['shopping'],1),
      'totalValue'=>(integer)0,
      'dateTime'=>null,
-     'pending'=>(float)substr($data['shopping'],1)/12,
-     'monthly'=>(float)substr($data['shopping'],1)/12,
+     'pending'=>(float)round(substr($data['shopping'],1)/12,0),
+     'monthly'=>(float)round(substr($data['shopping'],1)/12,0),
      'delivery'=>'',
      'delStatus'=>(integer)0,
     ); 
@@ -398,7 +399,7 @@ class CoachController extends \lithium\action\Controller {
 $key = PAYUMONEY_KEY;
 $txnid = "TXN-" . rand(10000,99999999);
 $amount = substr($data['shopping'],1);
-$productinfo = $data['CoachID'].'-'.$data['shopping'];
+$productinfo = $data['CoachID'].'#'.$data['shopping'];
 $firstname = urldecode($data['name']);
 $email = $data['email'];
 $mobile = $data['mobile'];
@@ -429,7 +430,55 @@ $action = $PAYU_BASE_URL . '/_payment';
 			// )));		
   return compact('data','paymentCount','success','amount','action','key','hash','txnid','udf1','udf5','productinfo','firstname','email','mobile');
  }
+ public function notification($CoachID=null){
+ $notification = X_notifications::find('first',array(
+  'conditions'=>array('CoachID'=>$CoachID)
+ ));
+ 
+ X_notifications::remove(array('_id'=>(string)$notification['_id']));
+ 
+ return $this->render(array('json' => array("success"=>"Yes",'notification'=>$notification)));		
+ 
+}
 
+	public function savetopic(){
+			if($this->request->data){
+			$uuid = new Uuid();
+			$TopicID = str_replace("}","",str_replace("{","",$uuid->create_guid()));
+
+				$data = array(
+					'TopicID' => $TopicID,
+					'CoachID'=>$this->request->data['CoachIDTopic'],
+					'CourseID'=>$this->request->data['CourseIDTopic'],
+					'Title'=>$this->request->data['TopicTitle'],
+					'Description'=>$this->request->data['TopicDescription'],
+					'Instructions'=>$this->request->data['TopicInstructions'],
+					'Grade'=>$this->request->data['TopicGrade'],
+					'Duration'=>$this->request->data['TopicDuration'],
+					'Sequence'=>$this->request->data['TopicSequence'],
+					'StartAfter'=>$this->request->data['TopicStartAfter'],
+					'URL'=>$this->request->data['TopicURL'],
+					'URLType'=>$this->request->data['TopicURLType'],
+				);		
+				$coaches = X_topics::create()->save($data);
+				return $this->render(array('json' => array("success"=>"Yes")));		
+			}
+		return $this->render(array('json' => array("success"=>"No")));		
+	}
 	
+	public function gettopics(){
+		$topics = X_topics::find('all',array(
+			'conditions'=>array('CourseID'=>$this->request->data['CourseID']),
+			'order'=>array('Sequence'=>'ASC')
+		));
+		return $this->render(array('json' => array("success"=>"Yes",'topics'=>$topics)));		
+	}
+	public function gettopic(){
+		$topic = X_topics::find('first',array(
+			'conditions'=>array('TopicID'=>$this->request->data['TopicID']),
+			'order'=>array('Sequence'=>'ASC')
+		));
+		return $this->render(array('json' => array("success"=>"Yes",'Topic'=>$topic)));		
+	}
 }
 ?>
