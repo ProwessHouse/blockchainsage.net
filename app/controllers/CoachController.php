@@ -8,6 +8,8 @@ use app\extensions\action\Uuid;
 use app\models\X_coaches;
 use app\models\X_courses;
 use app\models\X_topics;
+use app\models\X_assignments;
+use app\models\X_quizes;
 use app\models\X_categories;
 use app\models\X_urls;
 
@@ -443,24 +445,58 @@ $action = $PAYU_BASE_URL . '/_payment';
 
 	public function savetopic(){
 			if($this->request->data){
-			$uuid = new Uuid();
-			$TopicID = str_replace("}","",str_replace("{","",$uuid->create_guid()));
-
-				$data = array(
-					'TopicID' => $TopicID,
-					'CoachID'=>$this->request->data['CoachIDTopic'],
-					'CourseID'=>$this->request->data['CourseIDTopic'],
-					'Title'=>$this->request->data['TopicTitle'],
-					'Description'=>$this->request->data['TopicDescription'],
-					'Instructions'=>$this->request->data['TopicInstructions'],
-					'Grade'=>$this->request->data['TopicGrade'],
-					'Duration'=>$this->request->data['TopicDuration'],
-					'Sequence'=>$this->request->data['TopicSequence'],
-					'StartAfter'=>$this->request->data['TopicStartAfter'],
-					'URL'=>$this->request->data['TopicURL'],
-					'URLType'=>$this->request->data['TopicURLType'],
-				);		
-				$coaches = X_topics::create()->save($data);
+				if($this->request->data['TopicEditSave']=="Save"){
+					$uuid = new Uuid();
+					$TopicID = str_replace("}","",str_replace("{","",$uuid->create_guid()));
+					$data = array(
+						'TopicID' => $TopicID,
+						'CoachID'=>$this->request->data['CoachIDTopic'],
+						'CourseID'=>$this->request->data['CourseIDTopic'],
+						'Title'=>$this->request->data['TopicTitle'],
+						'Description'=>$this->request->data['TopicDescription'],
+						'Instructions'=>$this->request->data['TopicInstructions'],
+						'Grade'=>$this->request->data['TopicGrade'],
+						'Duration'=>$this->request->data['TopicDuration'],
+						'Sequence'=>$this->request->data['TopicSequence'],
+						'StartAfter'=>$this->request->data['TopicStartAfter'],
+						'URL'=>$this->request->data['TopicURL'],
+						'URLType'=>$this->request->data['TopicURLType'],
+					);		
+					$topic = X_topics::create()->save($data);
+				}
+				if($this->request->data['TopicEditSave']=="Edit"){
+					$conditions = array('TopicID'=>$this->request->data['TopicID']);
+					$data = array(
+						'TopicID' => $this->request->data['TopicID'],
+						'CoachID'=>$this->request->data['CoachIDTopic'],
+						'CourseID'=>$this->request->data['CourseIDTopic'],
+						'Title'=>$this->request->data['TopicTitle'],
+						'Description'=>$this->request->data['TopicDescription'],
+						'Instructions'=>$this->request->data['TopicInstructions'],
+						'Grade'=>$this->request->data['TopicGrade'],
+						'Duration'=>$this->request->data['TopicDuration'],
+						'Sequence'=>$this->request->data['TopicSequence'],
+						'StartAfter'=>$this->request->data['TopicStartAfter'],
+						'URL'=>$this->request->data['TopicURL'],
+						'URLType'=>$this->request->data['TopicURLType'],
+					);
+					X_topics::update($data,$conditions);
+				}
+				
+				$topics = X_topics::find('all',array(
+					'order'=>array('Sequence'=>'ASC')
+				));
+				$i = 0;
+				foreach($topics as $topic){
+					$data = array(
+						'Sequence'=>$i+1,
+						'StartAfter'=>$i
+					);
+					$conditions = array('TopicID'=>$topic['TopicID']);
+					X_topics::update($data,$conditions);
+					$i++;
+				}
+				
 				return $this->render(array('json' => array("success"=>"Yes")));		
 			}
 		return $this->render(array('json' => array("success"=>"No")));		
@@ -480,5 +516,28 @@ $action = $PAYU_BASE_URL . '/_payment';
 		));
 		return $this->render(array('json' => array("success"=>"Yes",'Topic'=>$topic)));		
 	}
+	public function deletetopic(){
+		X_topics::remove(array('TopicID'=>$this->request->data['TopicID']));
+		X_assignments::remove(array('TopicID'=>$this->request->data['TopicID']));
+		X_quizes::remove(array('TopicID'=>$this->request->data['TopicID']));
+		$topics = X_topics::find('all',array(
+			'order'=>array('Sequence'=>'ASC')
+		));
+		$i = 0;
+		$CourseID = '';
+		foreach($topics as $topic){
+			$data = array(
+				'Sequence'=>$i+1,
+				'StartAfter'=>$i
+			);
+			$conditions = array('TopicID'=>$topic['TopicID']);
+			$CourseID = $topic['CourseID'];
+			X_topics::update($data,$conditions);
+			$i++;
+		}
+		return $this->render(array('json' => array("success"=>"Yes",'CourseID'=>$CourseID)));		
+	}
+	
+	
 }
 ?>
