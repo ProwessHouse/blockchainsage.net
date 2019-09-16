@@ -350,6 +350,8 @@ class CoachController extends \lithium\action\Controller {
      'month'=>$p['month'],
      'datetime'=>$p['datetime'],
      'shopping'=>$p['shopping'],
+					 'gstShopping'=>$p['gstShopping'],
+						'totalShopping'=>$p['totalShopping'],
      'approved'=>$p['approved'],
     );
      array_push($paymentArray,$previousPayment);
@@ -366,6 +368,9 @@ class CoachController extends \lithium\action\Controller {
     $summaryArray["summary.".$m] = array(
      'CoachID'=>$data['CoachID'],
      'shopping'=>(integer)substr($data['shopping'],1),
+					 'gstShopping'=>(integer)$data['gstShopping'],
+						'totalShopping'=>(integer)$data['totalShopping'],
+
      'totalValue'=>(integer)0,
      'dateTime'=>null,
      'pending'=>(float)round(substr($data['shopping'],1)/12,0),
@@ -383,6 +388,9 @@ class CoachController extends \lithium\action\Controller {
    'month'=>date('Y-m-d',strtotime($data['month'])),
    'datetime'=>gmdate('Y-m-d',time()),
    'shopping'=>(integer)substr($data['shopping'],1),
+				'gstShopping'=>(integer)$data['gstShopping'],
+				'totalShopping'=>(integer)$data['totalShopping'],
+
    'approved'=>'No'
   );
    array_push($paymentArray,$paymentA);
