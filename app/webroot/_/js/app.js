@@ -105,7 +105,7 @@ function checkdata() {
 		
 		var fieldName = "#selected"+i;
 		var field = "selected"+i;
-		if( $$(fieldName).val() != 0){
+		if( $$(fieldName).val() == 0){
 			app.dialog.alert("Please select an option for question "+i,"Personality Test");
 			app.input.focus(field);
 			return false;
