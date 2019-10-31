@@ -19,7 +19,7 @@
 						</select>
 						<div class="item-content">
 								<div class="item-inner">
-										<div class="item-title"><?=$q['Number']?>. I <?php echo strtolower($q['Question']);?></div>
+										<div class="item"><?=$q['Number']?>. I <?php echo strtolower($q['Question']);?></div>
 								</div>
 						</div>
 					</a>
