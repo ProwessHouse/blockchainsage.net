@@ -11,8 +11,11 @@ var routes = [
   {
     path: '/form/',
     url: './pages/form.html',
+  },  
+		{
+    path: '/assessment/assess/:id',
+    url: './pages/assessment.html',
   },
-
 
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

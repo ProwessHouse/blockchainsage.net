@@ -31,7 +31,6 @@
 </head>
 <body>
   <div id="app">
-    
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main view-init safe-areas">
       <div class="page" data-name="home">
@@ -66,9 +65,6 @@
         <div class="page-content">
           <div class="block-title">.</div>
 			<?php echo $this->content(); ?>
-
-
-
         </div>
       </div>
     </div>

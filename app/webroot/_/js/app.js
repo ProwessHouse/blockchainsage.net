@@ -56,7 +56,9 @@ var app = new Framework7({
     },
   },
 });
-
+var mainView = app.views.create('.view-main', {
+  url: '/'
+});
 // Login Screen Demo
 $$('#my-login-screen .login-button').on('click', function () {
   var username = $$('#my-login-screen [name="username"]').val();
@@ -100,9 +102,10 @@ function checkdata() {
    return false;
   }
 	for(i=1;i<=50;i++){
+		
 		var fieldName = "#selected"+i;
 		var field = "selected"+i;
-		if( $$(fieldName).val() == 0){
+		if( $$(fieldName).val() != 0){
 			app.dialog.alert("Please select an option for question "+i,"Personality Test");
 			app.input.focus(field);
 			return false;
@@ -111,12 +114,12 @@ function checkdata() {
   var submitURL = server+'';
   app.request.post(submitURL, formData, function (data) {
    var gotData = JSON.parse(data);
-   if(gotData['success']=="Yes"){  
+   if(gotData['success']=="Yes"){
     var stringy = JSON.stringify(formData);
 				localStorage.setItem(storage+'.Data',stringy);	
-				success = "Yes";
-				console.log("Yes");
-				mainView.router.navigate('/assessment/');
+				app.dialog.alert("Personality test complete. Please check your email for results","Personality Test");
+
+//				mainView.router.navigate('/assessment/assess/'+gotData['_id']+"/");
 				return false;
   }else{
     app.dialog.alert("Cannot get data of personality!!!", "Personality Test");
