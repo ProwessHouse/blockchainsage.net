@@ -29,15 +29,18 @@ class AssessmentController extends \lithium\action\Controller {
 		$data = $this->request->data;
 		$person = X_personalityusers::create();
 		$id = $person->save($data);
-	//	print_r($id);
+		// print_r($person['_id']);
+		$newID = (string)$person['_id'];
 		$questions = X_personalitytests::find('all');
-		$this->redirect(['Assessment::index'], ['exit' => true]);
+		$result = $this->assess($newID,true);
+		return $this->render(array('json' => array("success"=>"Yes",'_id'=>$newID,"result"=>$result)));		      
+		
 	}
 		$questions = X_personalitytests::find('all');
 		return compact('questions');
 		
 	}
-public function assess($id=null){
+public function assess($id=null,$json=false){
 	
 	$personalityusers = X_personalityusers::find('first',array(
 		'conditions'=>array('_id'=>$id)
@@ -154,8 +157,18 @@ public function assess($id=null){
 			$AnalysisO = $r['Discription']." (".$o."): ". $r['Analysis'];
 		}
 	}
-		
-	return compact('personalityusers','a','e','n','c','o','AnalysisA','AnalysisE','AnalysisC','AnalysisN','AnalysisO');
+		if($json==true){
+			$html = "<b>".$personalityusers['Name']."</b>";
+			$html = $html + "<br>".$AnalysisA;
+			$html = $html + "<br>".$AnalysisE;
+			$html = $html + "<br>".$AnalysisC;
+			$html = $html + "<br>".$AnalysisN;
+			$html = $html + "<br>".$AnalysisO;
+			return $html;
+			
+		}else{
+			return compact('personalityusers','a','e','n','c','o','AnalysisA','AnalysisE','AnalysisC','AnalysisN','AnalysisO');
+		}
 }
 }
 ?>

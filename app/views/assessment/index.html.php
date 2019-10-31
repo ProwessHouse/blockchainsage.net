@@ -6,9 +6,15 @@
 <p>For each statement 1 to 50 mark how you agree with the scale of 1 to 5, where 1=disagree, 2=silghtly disagree, 3=neutral, 4=slightly agree, 5=agree</p>
 <form method="post" enctype="multipart/form-data" action="#" name="personality" id="personality">
 <?php foreach ($questions as $q){?>
-	<div class="row list">
-		<div class="col-100">
-					<a class="item-link smart-select smart-select-init" data-open-in="sheet">
+	<div class="block"><?=$q['Number']?>. I <?php echo strtolower($q['Question']);?></div>
+<div class="block block-strong">
+<div class="row">
+	<div class="col-25 align-left">Disagree-1 </div>
+  <div class="col-50"><input type="range" min="0" max="5" step="1" value="0" name="selected<?=$q['Number']?>" id="selected<?=$q['Number']?>" class="col-60"></div>
+		<div class="col-25" style="text-align:right">5-Agree</div>
+</div>
+</div>
+<!--					<a class="item-link smart-select smart-select-init" data-open-in="sheet">
 						<select name="selected<?=$q['Number']?>" id="selected<?=$q['Number']?>" >
 						<option value="0">-- Select from 1 to 5 --</option>
 							<option value="1">1-Disagree</option>
@@ -22,10 +28,8 @@
 										<div class="item"><?=$q['Number']?>. I <?php echo strtolower($q['Question']);?></div>
 								</div>
 						</div>
-					</a>
-		</div>
-	</div>
-<?php }?>
+					</a> -->
+	<?php }?>
 <div class="block-title">Your Details</div>
 <div class="list no-hairlines-md">
   <ul>
